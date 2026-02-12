@@ -44,7 +44,7 @@ export const Main = () => {
         void clientRef.current?.setBadgeCount?.(count)
       },
       onWidgetSet: (visible) => {
-        if (visible)
+        if (visible === true)
           clientRef.current?.focus()
         else
           clientRef.current?.unfocus()
