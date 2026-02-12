@@ -46,7 +46,7 @@ export const Main = () => {
       onWidgetSet: (visible) => {
         if (visible === true)
           clientRef.current?.focus()
-        else
+        else if (visible === false)
           clientRef.current?.unfocus()
       },
       onHyperlinkOpen: (url, target) => {
