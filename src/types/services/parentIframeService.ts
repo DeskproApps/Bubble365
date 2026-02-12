@@ -13,9 +13,13 @@ export class ParentIframeService {
   private pending = new Map<string, (msg: Message<unknown>) => void>()
   private handlers: ParentHandlers
   private readonly boundOnMessage: (event: MessageEvent) => void
-  private settings: Settings
+  private readonly settings: Settings
+  private readonly bubbleOrigin: string
 
   constructor(iframe: HTMLIFrameElement, handlers: ParentHandlers, settings: Settings) {
+    const bubbleUrl = import.meta.env.VITE_BUBBLE_URL
+    this.bubbleOrigin = new URL(bubbleUrl, window.location.href).origin
+
     this.iframe = iframe
     this.handlers = handlers
     this.settings = settings
@@ -29,7 +33,7 @@ export class ParentIframeService {
   public sendMessage<TPayload>(channel: PostMessageChannel, cmd: string, payload?: TPayload, response_id?: string | null): void {
     const message = this.createMessage(channel, cmd, payload, response_id)
     console.debug("[ParentIframeService] Post message", message)
-    this.iframe.contentWindow?.postMessage(JSON.stringify(message), "*")
+    this.iframe.contentWindow?.postMessage(JSON.stringify(message), this.bubbleOrigin)
   }
 
   public sendRequest<TRequest, TResponse>(
@@ -51,7 +55,7 @@ export class ParentIframeService {
         resolve(msg as Message<TResponse>)
       })
 
-      this.iframe.contentWindow?.postMessage(JSON.stringify(request), "*")
+      this.iframe.contentWindow?.postMessage(JSON.stringify(request), this.bubbleOrigin)
     })
   }
 
@@ -83,6 +87,8 @@ export class ParentIframeService {
 
   private onMessage(event: MessageEvent): void {
     if (typeof event.data !== "string") return
+    if (event.origin !== this.bubbleOrigin) return
+    if (event.source !== this.iframe.contentWindow) return
 
     console.debug("[ParentIframeService] Received message", event.data)
 
