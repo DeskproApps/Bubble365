@@ -1,7 +1,5 @@
 import React, {useCallback, useEffect, useRef} from "react"
-import {
-  useDeskproAppClient,
-} from "@deskpro/app-sdk"
+import {useDeskproAppClient} from "@deskpro/app-sdk"
 import {ParentIframeService} from "@/types/services/parentIframeService"
 
 const BUBBLE_URL = import.meta.env.VITE_BUBBLE_URL as string
@@ -15,7 +13,7 @@ export const Main = () => {
   if (!BUBBLE_URL) {
     console.error(
       "The environment variable VITE_BUBBLE_URL is not defined. " +
-      "Bubble iframe cannot be rendered. Please set VITE_BUBBLE_URL in your environment."
+      "Bubble iframe cannot be rendered. Please set VITE_BUBBLE_URL in your environment.",
     )
 
     return (
@@ -26,40 +24,41 @@ export const Main = () => {
   }
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) return
 
-    clientRef.current = client;
-    void client.run().catch(console.error);
-  }, [client]);
+    clientRef.current = client
+    void client.run().catch(console.error)
+  }, [client])
 
   useEffect(() => {
     const iframe = iframeRef.current
     if (!iframe) return
 
     const service = new ParentIframeService(iframe, {
-      onInitialized: () => {
-        console.info("IframeService initialized")
-      },
-      onBadgeSet: (count) => {
-        void clientRef.current?.setBadgeCount?.(count)
-      },
-      onWidgetSet: (visible) => {
-        if (visible === true)
-          clientRef.current?.focus()
-        else if (visible === false)
-          clientRef.current?.unfocus()
-      },
-      onHyperlinkOpen: (url, target) => {
-        if (url.includes("deskpro.com/app") || url.includes("deskprotesting.com/app")) {
+        onInitialized: () => {
+          console.info("IframeService initialized")
+        },
+        onBadgeSet: (count) => {
+          void clientRef.current?.setBadgeCount?.(count)
+        },
+        onWidgetSet: (visible) => {
+          if (visible === true)
+            clientRef.current?.focus()
+          else if (visible === false)
+            clientRef.current?.unfocus()
+        },
+        onHyperlinkOpen: (url, target) => {
+          if (url.includes("deskpro.com/app") || url.includes("deskprotesting.com/app")) {
             window.parent.location.replace(url)
             return
-        }
-        window.open(url, target ?? "_blank")
-      }},
-    {
-      override_hyperlink_open: true
-    }
-  )
+          }
+          window.open(url, target ?? "_blank")
+        },
+      },
+      {
+        override_hyperlink_open: true,
+      },
+    )
 
     iframeServiceRef.current = service
 
