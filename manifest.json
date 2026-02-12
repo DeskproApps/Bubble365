@@ -1,0 +1,33 @@
+{
+  "name": "@deskpro-apps/bubble365",
+  "title": "Bubble365",
+  "description": "Incoming calls are automatically recognized and linked to existing contacts.",
+  "version": "0.0.1",
+  "scope": "agent",
+  "isSingleInstall": true,
+  "hasDevMode": false,
+  "targets": [
+    {
+      "target": "global",
+      "entrypoint": "index.html",
+      "options": {
+        "height": "600px",
+        "width": "400px"
+      }
+    }
+  ],
+  "proxy": {
+    "whitelist": [
+      {
+        "url": "https://*eu.bubble365.app/.*",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "timeout": 10
+      }
+    ]
+  }
+}
