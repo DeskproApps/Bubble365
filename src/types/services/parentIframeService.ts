@@ -95,7 +95,8 @@ export class ParentIframeService {
     let parsed: unknown
     try {
       parsed = JSON.parse(event.data)
-    } catch {
+    } catch (error) {
+      console.error("[ParentIframeService] Dropped message", { event: event.data, error })
       return
     }
 
