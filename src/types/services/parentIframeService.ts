@@ -119,7 +119,8 @@ export class ParentIframeService {
           success: true,
           settings: this.settings,
         },
-        msg.id)
+        msg.id,
+      )
 
       this.handlers.onInitialized?.()
       return
