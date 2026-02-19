@@ -1,4 +1,4 @@
-import {Message} from "@/types/message"
+import {isBubble365Message, Message} from "@/types/message"
 import {ParentHandlers} from "@/types/parentHandlers"
 
 export type PostMessageChannel = "initialize" | "call" | "badge" | "widget" | "hyperlink";
@@ -92,16 +92,18 @@ export class ParentIframeService {
 
     console.debug("[ParentIframeService] Received message", event.data)
 
-    let parsed: unknown
+    let msg: unknown
     try {
-      parsed = JSON.parse(event.data)
+      msg = JSON.parse(event.data)
     } catch (error) {
-      console.error("[ParentIframeService] Dropped message", { event: event.data, error })
+      console.error("[ParentIframeService] Error while parsing message, dropped", { event: event.data, error })
       return
     }
 
-    const msg = parsed as Message<unknown>
-    if (!msg || msg.protocol !== "bubble365" || msg.version !== 1) return
+    if (!isBubble365Message(msg)) {
+      console.debug("[ParentIframeService] not a Bubble365 message, dropped", event)
+      return
+    }
 
     // response to a request
     if (msg.response_id && this.pending.has(msg.response_id)) {
