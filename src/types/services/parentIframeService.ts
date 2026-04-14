@@ -17,7 +17,7 @@ export class ParentIframeService {
   private readonly bubbleOrigin: string
 
   constructor(iframe: HTMLIFrameElement, handlers: ParentHandlers, settings: Settings) {
-    const bubbleUrl = import.meta.env.VITE_BUBBLE_URL
+    const bubbleUrl = import.meta.env.VITE_BUBBLE_URL as string
     this.bubbleOrigin = new URL(bubbleUrl, window.location.href).origin
 
     this.iframe = iframe
