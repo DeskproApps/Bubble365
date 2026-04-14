@@ -10,19 +10,6 @@ export const Main = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const iframeServiceRef = useRef<ParentIframeService | null>(null)
 
-  if (!BUBBLE_URL) {
-    console.error(
-      "The environment variable VITE_BUBBLE_URL is not defined. " +
-      "Bubble iframe cannot be rendered. Please set VITE_BUBBLE_URL in your environment.",
-    )
-
-    return (
-      <div>
-        Configuration error: Bubble URL is not configured. Please contact an administrator.
-      </div>
-    )
-  }
-
   useEffect(() => {
     if (!client) return
 
@@ -85,6 +72,19 @@ export const Main = () => {
       console.error("Call failed:", response.payload?.error)
     }
   }, [])
+
+  if (!BUBBLE_URL) {
+    console.error(
+      "The environment variable VITE_BUBBLE_URL is not defined. " +
+      "Bubble iframe cannot be rendered. Please set VITE_BUBBLE_URL in your environment.",
+    )
+
+    return (
+      <div>
+        Configuration error: Bubble URL is not configured. Please contact an administrator.
+      </div>
+    )
+  }
 
   return (
     <div className="root">
