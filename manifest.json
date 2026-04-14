@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/bubble365",
   "title": "Bubble365",
   "description": "Incoming calls are automatically recognized and linked to existing contacts.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": false,
