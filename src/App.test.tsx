@@ -1,4 +1,4 @@
-describe("App", () => {
+describe("App", () => { // Placeholder test
   it("should be defined", () => {
     expect(true).toBe(true);
   });
